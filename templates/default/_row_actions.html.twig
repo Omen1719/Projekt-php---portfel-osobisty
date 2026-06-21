@@ -1,0 +1,15 @@
+{# Action buttons for a table row. Params: route_prefix (e.g. 'wallet'), id #}
+<div class="btn-group btn-group-sm" role="group">
+    <a href="{{ url(route_prefix ~ '_view', {id: id}) }}"
+       class="btn btn-outline-secondary" title="{{ 'action.view'|trans }}">
+        <i class="bi bi-eye"></i>
+    </a>
+    <a href="{{ url(route_prefix ~ '_edit', {id: id}) }}"
+       class="btn btn-outline-primary" title="{{ 'action.edit'|trans }}">
+        <i class="bi bi-pencil"></i>
+    </a>
+    <a href="{{ url(route_prefix ~ '_delete', {id: id}) }}"
+       class="btn btn-outline-danger" title="{{ 'action.delete'|trans }}">
+        <i class="bi bi-trash"></i>
+    </a>
+</div>

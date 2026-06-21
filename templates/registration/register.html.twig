@@ -1,0 +1,6 @@
+{% include 'default/_form.html.twig' with {
+    form: form,
+    page_title: 'title.register'|trans,
+    submit_label: 'action.register'|trans,
+    back_to_list_path: url('app_login'),
+} only %}

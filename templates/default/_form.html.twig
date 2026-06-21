@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ page_title|default('') }}{% endblock %}
+
+{% block body %}
+    <h1>{{ page_title|default('') }}</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="form-group row float-end">
+        <input type="submit" value="{{ submit_label|default('action.save'|trans) }}" class="btn btn-primary"/>
+    </div>
+    {{ form_end(form) }}
+
+    {% if back_to_list_path is defined and back_to_list_path is not null %}
+        <p>
+            <a href="{{ back_to_list_path }}" title="{{ 'action.back_to_list'|trans }}">
+                {{ 'action.back_to_list'|trans }}
+            </a>
+        </p>
+    {% endif %}
+
+    <script>
+        (function () {
+            var input = document.getElementById('operation_tags');
+            if (!input) {
+                return;
+            }
+            input.style.display = 'none';
+
+            var box = document.createElement('div');
+            var group = document.createElement('div');
+            group.className = 'input-group';
+            var field = document.createElement('input');
+            field.type = 'text';
+            field.className = 'form-control';
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'btn btn-outline-secondary';
+            button.textContent = '+';
+            group.appendChild(field);
+            group.appendChild(button);
+
+            var list = document.createElement('div');
+            list.className = 'd-flex flex-wrap gap-2 mt-2';
+
+            box.appendChild(group);
+            box.appendChild(list);
+            input.parentNode.appendChild(box);
+
+            var tags = input.value.split(',').map(function (item) {
+                return item.trim();
+            }).filter(function (item) {
+                return item.length > 0;
+            });
+
+            function sync() {
+                input.value = tags.join(', ');
+                list.innerHTML = '';
+                tags.forEach(function (tag, index) {
+                    var badge = document.createElement('span');
+                    badge.className = 'badge bg-secondary d-inline-flex align-items-center';
+                    badge.textContent = tag;
+                    var close = document.createElement('button');
+                    close.type = 'button';
+                    close.className = 'btn-close btn-close-white ms-2';
+                    close.setAttribute('aria-label', 'X');
+                    close.addEventListener('click', function () {
+                        tags.splice(index, 1);
+                        sync();
+                    });
+                    badge.appendChild(close);
+                    list.appendChild(badge);
+                });
+            }
+
+            function add() {
+                var value = field.value.trim();
+                if (value.length > 0 && tags.indexOf(value) === -1) {
+                    tags.push(value);
+                }
+                field.value = '';
+                sync();
+                field.focus();
+            }
+
+            button.addEventListener('click', add);
+            field.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    add();
+                }
+            });
+
+            sync();
+        })();
+    </script>
+{% endblock %}

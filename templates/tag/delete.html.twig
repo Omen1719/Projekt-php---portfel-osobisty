@@ -1,0 +1,6 @@
+{% include 'default/_form.html.twig' with {
+    form: form,
+    page_title: 'title.tag_delete'|trans({'%id%': tag.id|default('')}),
+    submit_label: 'action.delete'|trans,
+    back_to_list_path: url('tag_index'),
+} only %}

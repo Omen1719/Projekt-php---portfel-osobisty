@@ -1,0 +1,6 @@
+{% include 'default/_form.html.twig' with {
+    form: form,
+    page_title: 'title.wallet_edit'|trans({'%id%': wallet.id|default('')}),
+    submit_label: 'action.edit'|trans,
+    back_to_list_path: url('wallet_index'),
+} only %}

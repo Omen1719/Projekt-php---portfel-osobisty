@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'title.operation_list'|trans }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.operation_list'|trans }}</h1>
+
+    <p>
+        <a href="{{ url('operation_create') }}" class="btn btn-primary" title="{{ 'action.create'|trans }}">
+            {{ 'action.create'|trans }}
+        </a>
+    </p>
+
+    <form method="get" action="{{ url('operation_index') }}" class="row g-2 align-items-end mb-3">
+        <div class="col-auto">
+            <label class="form-label" for="categoryId">{{ 'label.category'|trans }}</label>
+            <select name="categoryId" id="categoryId" class="form-select">
+                <option value="">{{ 'label.all_categories'|trans }}</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {{ filters.categoryId == category.id ? 'selected' }}>
+                        {{ category.title }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="form-label" for="tagId">{{ 'label.tags'|trans }}</label>
+            <select name="tagId" id="tagId" class="form-select">
+                <option value="">{{ 'label.all_tags'|trans }}</option>
+                {% for tag in tags %}
+                    <option value="{{ tag.id }}" {{ filters.tagId == tag.id ? 'selected' }}>
+                        {{ tag.title }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="form-label" for="dateFrom">{{ 'label.date_from'|trans }}</label>
+            <input type="date" name="dateFrom" id="dateFrom" class="form-control" value="{{ filters.dateFrom }}">
+        </div>
+        <div class="col-auto">
+            <label class="form-label" for="dateTo">{{ 'label.date_to'|trans }}</label>
+            <input type="date" name="dateTo" id="dateTo" class="form-control" value="{{ filters.dateTo }}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">{{ 'action.filter'|trans }}</button>
+            <a href="{{ url('operation_index') }}" class="btn btn-outline-secondary">{{ 'action.show_all'|trans }}</a>
+        </div>
+    </form>
+
+    <p>
+        <strong>{{ 'label.period_balance'|trans }}:</strong> {{ balance|number_format(2, '.', ' ') }}
+    </p>
+
+    {% if pagination is defined and pagination.items|length %}
+        <div class="navigation text-center">{{ knp_pagination_render(pagination) }}</div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{{ knp_pagination_sortable(pagination, 'label.id'|trans, 'operation.id') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label.date'|trans, 'operation.date') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label.title'|trans, 'operation.title') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label.operation_type'|trans, 'operation.type') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label.amount'|trans, 'operation.amount') }}</th>
+                <th>{{ 'label.category'|trans }}</th>
+                <th>{{ 'label.wallet'|trans }}</th>
+                <th>{{ 'label.tags'|trans }}</th>
+                <th>{{ 'label.actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for operation in pagination.items %}
+                <tr>
+                    <td>{{ operation.id }}</td>
+                    <td>{{ operation.date|format_date('medium') }}</td>
+                    <td>{{ operation.title }}</td>
+                    <td>{{ ('label.operation_' ~ operation.type)|trans }}</td>
+                    <td>{{ operation.amount|number_format(2, '.', ' ') }}</td>
+                    <td>
+                        <a href="{{ url('operation_index', {categoryId: operation.category.id}) }}"
+                           title="{{ 'label.category'|trans }}: {{ operation.category.title }}">
+                            {{ operation.category.title }}
+                        </a>
+                    </td>
+                    <td>{{ operation.wallet.title }}</td>
+                    <td>
+                        {% for tag in operation.tags %}
+                            <a href="{{ url('operation_index', {tagId: tag.id}) }}"
+                               class="badge bg-secondary text-decoration-none">{{ tag.title }}</a>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% include 'default/_row_actions.html.twig' with {route_prefix: 'operation', id: operation.id} only %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="navigation text-center">{{ knp_pagination_render(pagination) }}</div>
+    {% else %}
+        <p>{{ 'message.empty_list'|trans }}</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ruleset name="App">
+    <description>Mirrors the grader: phpcs --standard=Symfony src/ --ignore=Kernel.php</description>
+
+    <file>src</file>
+
+    <arg name="extensions" value="php"/>
+    <arg name="colors"/>
+    <arg value="sp"/>
+
+    <exclude-pattern>*/Kernel.php</exclude-pattern>
+
+    <!-- Requires escapestudios/symfony2-coding-standard registered (the grader's script does this). -->
+    <rule ref="Symfony"/>
+</ruleset>

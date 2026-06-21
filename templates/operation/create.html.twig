@@ -1,0 +1,6 @@
+{% include 'default/_form.html.twig' with {
+    form: form,
+    page_title: 'title.operation_create'|trans,
+    submit_label: 'action.create'|trans,
+    back_to_list_path: url('operation_index'),
+} only %}

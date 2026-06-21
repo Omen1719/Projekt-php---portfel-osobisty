@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'title.operation_details'|trans({'%id%': operation.id|default('')}) }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.operation_details'|trans({'%id%': operation.id|default('')}) }}</h1>
+    {% if operation is defined and operation.id %}
+        <dl class="dl-horizontal">
+            <dt>{{ 'label.id'|trans }}</dt><dd>{{ operation.id }}</dd>
+            <dt>{{ 'label.title'|trans }}</dt><dd>{{ operation.title }}</dd>
+            <dt>{{ 'label.operation_type'|trans }}</dt><dd>{{ ('label.operation_' ~ operation.type)|trans }}</dd>
+            <dt>{{ 'label.amount'|trans }}</dt><dd>{{ operation.amount|number_format(2, '.', ' ') }}</dd>
+            <dt>{{ 'label.date'|trans }}</dt><dd>{{ operation.date|format_date('long') }}</dd>
+            <dt>{{ 'label.category'|trans }}</dt><dd>{{ operation.category.title }}</dd>
+            <dt>{{ 'label.wallet'|trans }}</dt><dd>{{ operation.wallet.title }}</dd>
+            <dt>{{ 'label.tags'|trans }}</dt>
+            <dd>
+                {% for tag in operation.tags %}
+                    <span class="badge bg-secondary">{{ tag.title }}</span>
+                {% else %}
+                    {{ 'label.none'|trans }}
+                {% endfor %}
+            </dd>
+            {% if operation.note %}
+                <dt>{{ 'label.note'|trans }}</dt><dd>{{ operation.note|markdown_to_html }}</dd>
+            {% endif %}
+            <dt>{{ 'label.created_at'|trans }}</dt><dd>{{ operation.createdAt|format_date('long') }}</dd>
+            <dt>{{ 'label.updated_at'|trans }}</dt><dd>{{ operation.updatedAt|format_date('long') }}</dd>
+        </dl>
+        <p>
+            <a href="{{ url('operation_edit', {id: operation.id}) }}" class="btn btn-sm btn-outline-primary" title="{{ 'action.edit'|trans }}">
+                <i class="bi bi-pencil"></i> {{ 'action.edit'|trans }}
+            </a>
+            <a href="{{ url('operation_delete', {id: operation.id}) }}" class="btn btn-sm btn-outline-danger" title="{{ 'action.delete'|trans }}">
+                <i class="bi bi-trash"></i> {{ 'action.delete'|trans }}
+            </a>
+            <a href="{{ url('operation_index') }}" class="btn btn-sm btn-secondary" title="{{ 'action.back_to_list'|trans }}">
+                <i class="bi bi-arrow-left"></i> {{ 'action.back_to_list'|trans }}
+            </a>
+        </p>
+    {% else %}
+        <p>{{ 'message.record_not_found'|trans }}</p>
+    {% endif %}
+{% endblock %}

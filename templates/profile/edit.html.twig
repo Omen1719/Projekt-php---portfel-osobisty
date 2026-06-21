@@ -1,0 +1,6 @@
+{% include 'default/_form.html.twig' with {
+    form: form,
+    page_title: 'title.profile_edit'|trans,
+    submit_label: 'action.save'|trans,
+    back_to_list_path: url('profile_index'),
+} only %}

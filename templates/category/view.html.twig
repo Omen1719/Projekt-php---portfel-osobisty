@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'title.category_details'|trans({'%id%': category.id|default('')}) }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.category_details'|trans({'%id%': category.id|default('')}) }}</h1>
+    {% if category is defined and category.id %}
+        <dl class="dl-horizontal">
+            <dt>{{ 'label.id'|trans }}</dt><dd>{{ category.id }}</dd>
+            <dt>{{ 'label.created_at'|trans }}</dt><dd>{{ category.createdAt|format_date('long') }}</dd>
+            <dt>{{ 'label.updated_at'|trans }}</dt><dd>{{ category.updatedAt|format_date('long') }}</dd>
+            <dt>{{ 'label.title'|trans }}</dt><dd>{{ category.title }}</dd>
+            <dt>{{ 'label.slug'|trans }}</dt><dd>{{ category.slug }}</dd>
+        </dl>
+        <p>
+            <a href="{{ url('category_edit', {id: category.id}) }}" class="btn btn-sm btn-outline-primary" title="{{ 'action.edit'|trans }}">
+                <i class="bi bi-pencil"></i> {{ 'action.edit'|trans }}
+            </a>
+            {% if can_be_deleted is defined and can_be_deleted %}
+                <a href="{{ url('category_delete', {id: category.id}) }}" class="btn btn-sm btn-outline-danger" title="{{ 'action.delete'|trans }}">
+                    <i class="bi bi-trash"></i> {{ 'action.delete'|trans }}
+                </a>
+            {% endif %}
+            <a href="{{ url('category_index') }}" class="btn btn-sm btn-secondary" title="{{ 'action.back_to_list'|trans }}">
+                <i class="bi bi-arrow-left"></i> {{ 'action.back_to_list'|trans }}
+            </a>
+        </p>
+    {% else %}
+        <p>{{ 'message.record_not_found'|trans }}</p>
+    {% endif %}
+{% endblock %}
